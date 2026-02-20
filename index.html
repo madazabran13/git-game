@@ -1,0 +1,1933 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GitQuest 🚀 — Aprende Git & GitHub</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a12;
+    --surface: #12121e;
+    --card: #1a1a2e;
+    --border: #2a2a4a;
+    --accent: #f7c948;
+    --accent2: #ff6b6b;
+    --accent3: #4ecdc4;
+    --accent4: #a78bfa;
+    --text: #e8e8f0;
+    --muted: #6b6b8a;
+    --success: #4ade80;
+    --fail: #f87171;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Stars background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: 
+      radial-gradient(1px 1px at 10% 15%, rgba(247,201,72,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 25% 80%, rgba(78,205,196,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 50% 30%, rgba(167,139,250,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 75% 60%, rgba(247,201,72,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 90% 20%, rgba(255,107,107,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 35% 50%, rgba(78,205,196,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 60% 75%, rgba(167,139,250,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 80% 40%, rgba(247,201,72,0.2) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* SCREENS */
+  .screen { display: none; position: relative; z-index: 1; }
+  .screen.active { display: flex; flex-direction: column; min-height: 100vh; }
+
+  /* ===== HOME ===== */
+  #home {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    gap: 2rem;
+  }
+
+  .logo-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .logo-icon {
+    font-size: 5rem;
+    animation: float 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 30px rgba(247,201,72,0.5));
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+
+  .logo-title {
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 800;
+    letter-spacing: -2px;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 50%, var(--accent4) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .logo-sub {
+    font-family: 'Space Mono', monospace;
+    color: var(--accent3);
+    font-size: 0.9rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  .home-desc {
+    max-width: 500px;
+    color: var(--muted);
+    font-size: 1.1rem;
+    line-height: 1.7;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), #f59e0b);
+    color: #0a0a12;
+    border: none;
+    padding: 1rem 2.5rem;
+    font-size: 1.1rem;
+    font-weight: 800;
+    font-family: 'Syne', sans-serif;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 0 30px rgba(247,201,72,0.3);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 0 50px rgba(247,201,72,0.5);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    border: 2px solid var(--border);
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: 'Syne', sans-serif;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--accent3);
+    color: var(--accent3);
+    transform: translateY(-2px);
+  }
+
+  .home-btns { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+
+  /* Stats on home */
+  .home-stats {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .stat-item {
+    text-align: center;
+  }
+
+  .stat-num {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--accent);
+  }
+
+  .stat-label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* ===== LEVEL SELECT ===== */
+  #level-select {
+    padding: 2rem;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  .page-header {
+    text-align: center;
+    width: 100%;
+  }
+
+  .page-title {
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+  }
+
+  .page-sub {
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+  }
+
+  .levels-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 1000px;
+  }
+
+  .level-card {
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 20px;
+    padding: 1.8rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .level-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--level-color, var(--accent)) 0%, transparent 60%);
+    opacity: 0.05;
+    transition: opacity 0.3s;
+  }
+
+  .level-card:hover::before { opacity: 0.12; }
+
+  .level-card:hover {
+    border-color: var(--level-color, var(--accent));
+    transform: translateY(-5px);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  }
+
+  .level-card.locked {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .level-card.locked:hover { transform: none; }
+
+  .level-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+  }
+
+  .level-icon { font-size: 2.5rem; }
+
+  .level-badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    padding: 0.3rem 0.7rem;
+    border-radius: 20px;
+    background: var(--level-color, var(--accent));
+    color: #0a0a12;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .level-num {
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    margin-bottom: 0.3rem;
+  }
+
+  .level-name {
+    font-size: 1.3rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+  }
+
+  .level-desc {
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+  }
+
+  .level-meta {
+    display: flex;
+    gap: 1rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  .level-meta span { color: var(--level-color, var(--accent)); }
+
+  .stars-display {
+    display: flex;
+    gap: 0.2rem;
+    font-size: 1.2rem;
+  }
+
+  .lock-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3rem;
+    opacity: 0.5;
+  }
+
+  /* ===== GAME SCREEN ===== */
+  #game {
+    padding: 1rem;
+    gap: 1rem;
+    min-height: 100vh;
+  }
+
+  .game-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 1.2rem;
+    background: var(--card);
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .game-level-info {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+
+  .game-level-icon { font-size: 1.5rem; }
+
+  .game-level-name {
+    font-weight: 800;
+    font-size: 1rem;
+  }
+
+  .game-level-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  .game-progress {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .progress-text {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  .progress-bar {
+    width: 120px;
+    height: 8px;
+    background: var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 4px;
+    transition: width 0.5s ease;
+  }
+
+  .score-display {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.9rem;
+  }
+
+  .score-display span { color: var(--accent); font-weight: 700; }
+
+  .hearts {
+    display: flex;
+    gap: 0.3rem;
+    font-size: 1.1rem;
+  }
+
+  /* Question card */
+  .question-area {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 2rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 800px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .q-type-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    background: rgba(247,201,72,0.1);
+    color: var(--accent);
+    border: 1px solid rgba(247,201,72,0.2);
+    width: fit-content;
+  }
+
+  .question-text {
+    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+    font-weight: 600;
+    line-height: 1.5;
+  }
+
+  .code-block {
+    background: #0d0d1a;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--accent3);
+    line-height: 1.8;
+    border-left: 3px solid var(--accent);
+  }
+
+  .code-block .keyword { color: var(--accent4); }
+  .code-block .string { color: var(--success); }
+  .code-block .comment { color: var(--muted); }
+
+  /* Options */
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  @media (max-width: 500px) {
+    .options-grid { grid-template-columns: 1fr; }
+  }
+
+  .option-btn {
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    padding: 1rem 1.2rem;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.95rem;
+    color: var(--text);
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.25s;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+  }
+
+  .option-letter {
+    min-width: 28px;
+    height: 28px;
+    background: var(--border);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    transition: all 0.25s;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--accent3);
+    background: rgba(78,205,196,0.05);
+    transform: translateY(-2px);
+  }
+
+  .option-btn:hover:not(:disabled) .option-letter {
+    background: var(--accent3);
+    color: #0a0a12;
+  }
+
+  .option-btn.correct {
+    border-color: var(--success);
+    background: rgba(74,222,128,0.1);
+  }
+
+  .option-btn.correct .option-letter {
+    background: var(--success);
+    color: #0a0a12;
+  }
+
+  .option-btn.wrong {
+    border-color: var(--fail);
+    background: rgba(248,113,113,0.1);
+  }
+
+  .option-btn.wrong .option-letter {
+    background: var(--fail);
+    color: #0a0a12;
+  }
+
+  /* Fill blank */
+  .fill-area {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .terminal-input {
+    background: #0d0d1a;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 0.8rem 1rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    color: var(--accent3);
+    width: 100%;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+
+  .terminal-input:focus { border-color: var(--accent); }
+  .terminal-input.correct { border-color: var(--success); }
+  .terminal-input.wrong { border-color: var(--fail); }
+
+  .submit-btn {
+    background: linear-gradient(135deg, var(--accent3), #00b4ab);
+    color: #0a0a12;
+    border: none;
+    padding: 0.8rem 2rem;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+    align-self: flex-start;
+  }
+
+  .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(78,205,196,0.3); }
+
+  /* Order drag */
+  .order-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .order-item {
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 0.8rem 1rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    cursor: grab;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    transition: all 0.2s;
+    user-select: none;
+  }
+
+  .order-item:active { cursor: grabbing; opacity: 0.7; }
+  .order-item:hover { border-color: var(--accent4); background: rgba(167,139,250,0.05); }
+  .order-item.drag-over { border-color: var(--accent); border-style: dashed; }
+
+  .drag-handle { color: var(--muted); font-size: 1rem; }
+
+  /* Match pairs */
+  .match-area {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .match-col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .match-item {
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 0.7rem 1rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+
+  .match-item.left { border-color: var(--accent4); color: var(--accent4); font-family: 'Space Mono', monospace; font-size: 0.8rem; }
+  .match-item.right { color: var(--text); }
+  .match-item.selected { border-color: var(--accent); background: rgba(247,201,72,0.1); transform: scale(1.03); }
+  .match-item.matched { border-color: var(--success); background: rgba(74,222,128,0.1); opacity: 0.7; cursor: default; }
+  .match-item.wrong-match { border-color: var(--fail); background: rgba(248,113,113,0.1); animation: shake 0.4s; }
+
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    20% { transform: translateX(-5px); }
+    40% { transform: translateX(5px); }
+    60% { transform: translateX(-5px); }
+    80% { transform: translateX(5px); }
+  }
+
+  /* Feedback */
+  .feedback-bar {
+    padding: 1rem 1.2rem;
+    border-radius: 14px;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+    animation: slideUp 0.3s ease;
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(10px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .feedback-bar.correct {
+    background: rgba(74,222,128,0.1);
+    border: 1px solid var(--success);
+    color: var(--success);
+  }
+
+  .feedback-bar.wrong {
+    background: rgba(248,113,113,0.1);
+    border: 1px solid var(--fail);
+    color: var(--fail);
+  }
+
+  .feedback-icon { font-size: 1.4rem; flex-shrink: 0; }
+
+  .feedback-content { flex: 1; }
+  .feedback-title { font-weight: 700; margin-bottom: 0.3rem; }
+  .feedback-explain { opacity: 0.8; font-size: 0.85rem; }
+
+  .next-btn {
+    background: linear-gradient(135deg, var(--accent), #f59e0b);
+    color: #0a0a12;
+    border: none;
+    padding: 0.7rem 1.5rem;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-left: auto;
+    display: block;
+    transition: all 0.2s;
+    flex-shrink: 0;
+    align-self: center;
+  }
+
+  .next-btn:hover { transform: scale(1.05); }
+
+  /* ===== LEVEL COMPLETE ===== */
+  #level-complete {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    gap: 2rem;
+  }
+
+  .complete-icon {
+    font-size: 5rem;
+    animation: pop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  @keyframes pop {
+    0% { transform: scale(0); }
+    70% { transform: scale(1.15); }
+    100% { transform: scale(1); }
+  }
+
+  .complete-title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .complete-stats {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .complete-stat {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.2rem 1.8rem;
+    min-width: 120px;
+  }
+
+  .cs-value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--accent);
+    font-family: 'Space Mono', monospace;
+  }
+
+  .cs-label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .stars-earned {
+    font-size: 3rem;
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+  }
+
+  .star-anim {
+    animation: starPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+  }
+
+  .star-anim:nth-child(2) { animation-delay: 0.15s; }
+  .star-anim:nth-child(3) { animation-delay: 0.3s; }
+
+  @keyframes starPop {
+    0% { transform: scale(0) rotate(-30deg); opacity: 0; }
+    100% { transform: scale(1) rotate(0); opacity: 1; }
+  }
+
+  .complete-tip {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent3);
+    border-radius: 12px;
+    padding: 1.2rem 1.5rem;
+    text-align: left;
+    max-width: 500px;
+    width: 100%;
+  }
+
+  .complete-tip-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent3);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 0.5rem;
+  }
+
+  .complete-tip-text {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  .complete-btns { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+
+  /* ===== GAME OVER ===== */
+  #game-over {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    gap: 1.5rem;
+  }
+
+  /* ===== GLOSSARY ===== */
+  #glossary {
+    padding: 2rem;
+    gap: 1.5rem;
+    align-items: center;
+  }
+
+  .glossary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+    max-width: 1000px;
+    width: 100%;
+  }
+
+  .glossary-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.2rem;
+  }
+
+  .g-command {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--accent3);
+    background: rgba(78,205,196,0.1);
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+    display: inline-block;
+    margin-bottom: 0.6rem;
+  }
+
+  .g-desc { font-size: 0.9rem; color: var(--muted); line-height: 1.5; }
+
+  /* Notif toast */
+  .toast {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0.8rem 1.2rem;
+    font-size: 0.9rem;
+    z-index: 999;
+    animation: toastIn 0.3s ease;
+    max-width: 280px;
+  }
+
+  @keyframes toastIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+
+  /* Confetti particles */
+  .particle {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    pointer-events: none;
+    z-index: 998;
+    animation: confettiFall linear both;
+  }
+
+  @keyframes confettiFall {
+    0% { transform: translateY(-10px) rotate(0); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+  }
+
+  .back-btn {
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    cursor: pointer;
+    padding: 0.5rem 0;
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    align-self: flex-start;
+  }
+
+  .back-btn:hover { color: var(--accent3); }
+
+  /* Concept intro */
+  .concept-box {
+    background: linear-gradient(135deg, rgba(167,139,250,0.1), rgba(78,205,196,0.05));
+    border: 1px solid rgba(167,139,250,0.2);
+    border-radius: 14px;
+    padding: 1.2rem 1.5rem;
+  }
+
+  .concept-box h3 {
+    font-size: 0.9rem;
+    color: var(--accent4);
+    margin-bottom: 0.5rem;
+    font-family: 'Space Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .concept-box p {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .match-area { grid-template-columns: 1fr; }
+    .game-topbar { font-size: 0.85rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== HOME ===== -->
+<div id="home" class="screen active">
+  <div class="logo-area">
+    <div class="logo-icon">🚀</div>
+    <div class="logo-title">GitQuest</div>
+    <div class="logo-sub">// Aprende Git & GitHub jugando</div>
+  </div>
+
+  <p class="home-desc">
+    Domina los comandos y conceptos de Git y GitHub a través de misiones, retos y puzzles interactivos. ¡De cero a héroe del control de versiones!
+  </p>
+
+  <div class="home-stats">
+    <div class="stat-item">
+      <div class="stat-num">5</div>
+      <div class="stat-label">Niveles</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">40+</div>
+      <div class="stat-label">Preguntas</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">4</div>
+      <div class="stat-label">Tipos de retos</div>
+    </div>
+  </div>
+
+  <div class="home-btns">
+    <button class="btn-primary" onclick="showScreen('level-select')">🎮 Jugar</button>
+    <button class="btn-secondary" onclick="showScreen('glossary')">📖 Glosario</button>
+  </div>
+</div>
+
+<!-- ===== LEVEL SELECT ===== -->
+<div id="level-select" class="screen">
+  <button class="back-btn" onclick="showScreen('home')">← Inicio</button>
+  <div class="page-header">
+    <div class="page-title">Elige tu Misión</div>
+    <div class="page-sub">// Completa cada nivel para desbloquear el siguiente</div>
+  </div>
+  <div class="levels-grid" id="levels-grid"></div>
+</div>
+
+<!-- ===== GAME ===== -->
+<div id="game" class="screen">
+  <div class="game-topbar">
+    <button class="back-btn" style="align-self:center" onclick="confirmLeave()">← Salir</button>
+    <div class="game-level-info">
+      <span class="game-level-icon" id="g-icon">🌱</span>
+      <div>
+        <div class="game-level-name" id="g-name">Nivel</div>
+        <div class="game-level-num" id="g-num">Pregunta 1/8</div>
+      </div>
+    </div>
+    <div class="game-progress">
+      <span class="progress-text" id="g-prog-text">0/8</span>
+      <div class="progress-bar"><div class="progress-fill" id="g-progress" style="width:0%"></div></div>
+    </div>
+    <div class="score-display">Puntos: <span id="g-score">0</span></div>
+    <div class="hearts" id="g-hearts">❤️❤️❤️</div>
+  </div>
+
+  <div class="question-area" id="question-area">
+    <!-- Dynamic content -->
+  </div>
+</div>
+
+<!-- ===== LEVEL COMPLETE ===== -->
+<div id="level-complete" class="screen">
+  <div class="complete-icon" id="lc-icon">🏆</div>
+  <div class="complete-title" id="lc-title">¡Nivel Completado!</div>
+
+  <div class="stars-earned" id="lc-stars"></div>
+
+  <div class="complete-stats">
+    <div class="complete-stat">
+      <div class="cs-value" id="lc-score">0</div>
+      <div class="cs-label">Puntos</div>
+    </div>
+    <div class="complete-stat">
+      <div class="cs-value" id="lc-correct">0/0</div>
+      <div class="cs-label">Correctas</div>
+    </div>
+    <div class="complete-stat">
+      <div class="cs-value" id="lc-time">0s</div>
+      <div class="cs-label">Tiempo</div>
+    </div>
+  </div>
+
+  <div class="complete-tip" id="lc-tip">
+    <div class="complete-tip-label">💡 Recuerda</div>
+    <div class="complete-tip-text" id="lc-tip-text"></div>
+  </div>
+
+  <div class="complete-btns">
+    <button class="btn-secondary" onclick="showScreen('level-select')">🗺️ Niveles</button>
+    <button class="btn-primary" id="lc-next-btn" onclick="nextLevel()">Siguiente nivel →</button>
+  </div>
+</div>
+
+<!-- ===== GAME OVER ===== -->
+<div id="game-over" class="screen">
+  <div style="font-size:5rem;animation:float 3s ease-in-out infinite">💀</div>
+  <div class="complete-title" style="background:linear-gradient(135deg,var(--fail),var(--accent2))">¡Sin vidas!</div>
+  <p style="color:var(--muted);max-width:400px">No te rindas. ¡Los mejores developers también se equivocan! Intenta de nuevo y aprende de tus errores.</p>
+  <div style="font-family:'Space Mono',monospace;font-size:0.85rem;color:var(--muted)">Puntos obtenidos: <span style="color:var(--accent)" id="go-score">0</span></div>
+  <div class="home-btns">
+    <button class="btn-primary" onclick="restartLevel()">🔄 Reintentar</button>
+    <button class="btn-secondary" onclick="showScreen('level-select')">Niveles</button>
+  </div>
+</div>
+
+<!-- ===== GLOSSARY ===== -->
+<div id="glossary" class="screen">
+  <button class="back-btn" onclick="showScreen('home')">← Inicio</button>
+  <div class="page-header">
+    <div class="page-title">📖 Glosario Git</div>
+    <div class="page-sub">// Comandos y conceptos esenciales</div>
+  </div>
+  <div class="glossary-grid" id="glossary-grid"></div>
+</div>
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+const GLOSSARY = [
+  { cmd: 'git init', desc: 'Inicializa un nuevo repositorio Git en el directorio actual.' },
+  { cmd: 'git clone <url>', desc: 'Clona un repositorio remoto a tu máquina local.' },
+  { cmd: 'git add .', desc: 'Agrega todos los cambios al área de staging.' },
+  { cmd: 'git commit -m ""', desc: 'Guarda los cambios del staging en el historial con un mensaje.' },
+  { cmd: 'git status', desc: 'Muestra el estado actual de los archivos en el repositorio.' },
+  { cmd: 'git log', desc: 'Muestra el historial de commits del repositorio.' },
+  { cmd: 'git push', desc: 'Sube los commits locales al repositorio remoto.' },
+  { cmd: 'git pull', desc: 'Descarga y fusiona cambios del repositorio remoto.' },
+  { cmd: 'git branch', desc: 'Lista, crea o elimina ramas del repositorio.' },
+  { cmd: 'git checkout -b', desc: 'Crea y cambia a una nueva rama.' },
+  { cmd: 'git merge', desc: 'Fusiona una rama con la rama actual.' },
+  { cmd: 'git stash', desc: 'Guarda cambios no confirmados temporalmente.' },
+  { cmd: 'git diff', desc: 'Muestra las diferencias entre cambios no confirmados.' },
+  { cmd: 'git remote add', desc: 'Conecta tu repositorio local con uno remoto (ej. GitHub).' },
+  { cmd: 'git reset', desc: 'Deshace commits o saca archivos del staging.' },
+  { cmd: 'git revert', desc: 'Crea un nuevo commit que deshace los cambios de uno anterior.' },
+  { cmd: 'git fetch', desc: 'Descarga cambios del remoto sin fusionarlos.' },
+  { cmd: 'git tag', desc: 'Marca puntos específicos en el historial (ej. versiones).' },
+];
+
+const LEVELS = [
+  {
+    id: 1,
+    name: 'Primer Commit',
+    icon: '🌱',
+    badge: 'BÁSICO',
+    color: '#4ade80',
+    desc: 'Conceptos fundamentales: ¿Qué es Git? ¿Para qué sirve el control de versiones?',
+    questions: 8,
+    tip: 'Git es un sistema de control de versiones distribuido. Fue creado por Linus Torvalds en 2005. Permite rastrear cambios, trabajar en equipo y volver a versiones anteriores del código.',
+  },
+  {
+    id: 2,
+    name: 'Staging & Commits',
+    icon: '📦',
+    badge: 'BÁSICO',
+    color: '#f7c948',
+    desc: 'Flujo básico: git add, git commit, git status y el ciclo de vida de los archivos.',
+    questions: 8,
+    tip: 'El flujo básico de Git es: modificar archivos → git add (staging) → git commit (guardar snapshot). El staging permite elegir exactamente qué cambios incluir en cada commit.',
+  },
+  {
+    id: 3,
+    name: 'Ramas & Merge',
+    icon: '🌿',
+    badge: 'INTERMEDIO',
+    color: '#4ecdc4',
+    desc: 'Branching: crear ramas, cambiar entre ellas y fusionarlas sin conflictos.',
+    questions: 8,
+    tip: 'Las ramas (branches) permiten trabajar en features de forma aislada sin afectar el código principal. El flujo estándar es: crear rama → hacer cambios → merge a main.',
+  },
+  {
+    id: 4,
+    name: 'GitHub Remoto',
+    icon: '☁️',
+    badge: 'INTERMEDIO',
+    color: '#a78bfa',
+    desc: 'Trabajo con GitHub: repositorios remotos, push, pull, fork y pull requests.',
+    questions: 8,
+    tip: 'GitHub es una plataforma en la nube para alojar repositorios Git. Los Pull Requests son propuestas de cambios que permiten revisión de código antes de fusionar. El Fork crea una copia personal de un repositorio ajeno.',
+  },
+  {
+    id: 5,
+    name: 'Pro Git',
+    icon: '⚡',
+    badge: 'AVANZADO',
+    color: '#ff6b6b',
+    desc: 'Comandos avanzados: rebase, stash, cherry-pick, resolución de conflictos y buenas prácticas.',
+    questions: 8,
+    tip: 'git rebase reescribe el historial de forma más limpia que merge. git stash guarda cambios temporalmente. git cherry-pick aplica un commit específico a otra rama. ¡Úsalos con cuidado en ramas compartidas!',
+  },
+];
+
+const QUESTIONS = {
+  1: [
+    {
+      type: 'multiple',
+      text: '¿Qué es Git?',
+      options: ['Un sistema de control de versiones', 'Un lenguaje de programación', 'Un editor de código', 'Un servidor web'],
+      correct: 0,
+      explain: 'Git es un sistema de control de versiones distribuido creado por Linus Torvalds en 2005 para gestionar el desarrollo del kernel Linux.',
+    },
+    {
+      type: 'multiple',
+      text: '¿Cuál es la diferencia entre Git y GitHub?',
+      options: ['Son exactamente lo mismo', 'Git es la herramienta local; GitHub es la plataforma en la nube', 'GitHub es el software; Git es el sitio web', 'Git solo funciona con GitHub'],
+      correct: 1,
+      explain: 'Git es un sistema de control de versiones que se instala localmente. GitHub es una plataforma web que usa Git para alojar repositorios en la nube.',
+    },
+    {
+      type: 'fill',
+      text: 'Escribe el comando para inicializar un repositorio Git en un directorio:',
+      code: '$ ___________',
+      correct: 'git init',
+      explain: '"git init" crea un subdirectorio .git con todos los archivos necesarios para el repositorio. Es el primer paso al crear un proyecto con Git.',
+    },
+    {
+      type: 'multiple',
+      text: '¿Qué es un "commit" en Git?',
+      options: ['Un archivo de configuración', 'Una foto del estado del proyecto en un momento dado', 'Un servidor remoto', 'Un tipo de rama especial'],
+      correct: 1,
+      explain: 'Un commit es un snapshot (instantánea) del estado de los archivos en un momento específico. Cada commit tiene un identificador único (hash SHA-1).',
+    },
+    {
+      type: 'order',
+      text: 'Ordena los pasos correctos para hacer tu primer commit:',
+      items: ['git add .', 'Modificar archivos', 'git commit -m "primer commit"', 'git init'],
+      correctOrder: [3, 1, 0, 2],
+      explain: 'El orden correcto es: 1) git init, 2) Modificar/crear archivos, 3) git add . (staging), 4) git commit.',
+    },
+    {
+      type: 'multiple',
+      text: '¿Para qué sirve el archivo .gitignore?',
+      options: ['Para eliminar el repositorio', 'Para ignorar archivos/carpetas y no rastrearlos con Git', 'Para mejorar la velocidad de Git', 'Para conectar con GitHub'],
+      correct: 1,
+      explain: '.gitignore lista archivos y carpetas que Git debe ignorar: node_modules, archivos de configuración con contraseñas, archivos compilados, etc.',
+    },
+    {
+      type: 'match',
+      text: 'Empareja cada término con su descripción:',
+      pairs: [
+        { left: 'Repository', right: 'Carpeta raíz del proyecto con historial' },
+        { left: 'Working Tree', right: 'Archivos que estás editando ahora' },
+        { left: 'Staging Area', right: 'Zona de preparación antes del commit' },
+        { left: 'Commit', right: 'Snapshot guardado en el historial' },
+      ],
+      explain: 'Estos son los 4 estados/áreas fundamentales de Git. Entenderlos es clave para dominar el flujo de trabajo.',
+    },
+    {
+      type: 'multiple',
+      text: '¿Qué archivo oculto crea "git init" para guardar toda la info del repositorio?',
+      options: ['.git', '.gitconfig', '.gitignore', '.github'],
+      correct: 0,
+      explain: 'git init crea un directorio oculto llamado .git que contiene todos los objetos, referencias y configuración del repositorio.',
+    },
+  ],
+  2: [
+    {
+      type: 'multiple',
+      text: '¿Qué hace "git add ." ?',
+      options: ['Crea un nuevo commit', 'Agrega todos los cambios al área de staging', 'Sube archivos a GitHub', 'Elimina archivos del repositorio'],
+      correct: 1,
+      explain: '"git add ." agrega todos los archivos modificados y nuevos del directorio actual al staging area. También puedes usar "git add archivo.txt" para agregar archivos específicos.',
+    },
+    {
+      type: 'fill',
+      text: 'Para ver el estado actual de los archivos (modificados, sin rastrear, en staging) usamos:',
+      code: '$ ___________',
+      correct: 'git status',
+      explain: '"git status" muestra qué archivos están modificados, cuáles están en staging y cuáles no están rastreados por Git.',
+    },
+    {
+      type: 'multiple',
+      text: '¿Cuál es un mensaje de commit con buenas prácticas?',
+      options: ['fix', 'cambios', 'feat: añadir autenticación de usuarios con JWT', 'asdfjkl123'],
+      correct: 2,
+      explain: 'Un buen mensaje de commit debe ser descriptivo y conciso. Se recomienda el formato Conventional Commits: "tipo: descripción" (ej. feat, fix, docs, refactor).',
+    },
+    {
+      type: 'multiple',
+      text: 'Un archivo está "untracked" en Git. ¿Qué significa?',
+      options: ['Fue eliminado del proyecto', 'Git no lo está rastreando todavía', 'Tiene un error de sintaxis', 'Ya fue subido a GitHub'],
+      correct: 1,
+      explain: 'Un archivo "untracked" es nuevo y Git no lo está siguiendo. Debes hacer "git add" para empezar a rastrearlo.',
+    },
+    {
+      type: 'order',
+      text: 'Ordena el flujo correcto para guardar un nuevo archivo en el historial:',
+      items: ['git commit -m "mensaje"', 'Crear el archivo', 'git status (verificar)', 'git add archivo.txt'],
+      correctOrder: [1, 3, 2, 0],
+      explain: 'Flujo: crear archivo → git add (staging) → git status (verificar) → git commit (guardar).',
+    },
+    {
+      type: 'multiple',
+      text: '¿Qué muestra "git log"?',
+      options: ['Los errores del código', 'El historial de commits con autor, fecha y mensaje', 'Los archivos modificados sin guardar', 'La configuración del repositorio'],
+      correct: 1,
+      explain: '"git log" muestra el historial de commits: hash, autor, fecha y mensaje. "git log --oneline" muestra una versión resumida.',
+    },
+    {
+      type: 'fill',
+      text: 'Para ver las diferencias entre archivos modificados y el último commit:',
+      code: '$ ___________',
+      correct: 'git diff',
+      explain: '"git diff" muestra las líneas añadidas (+) y eliminadas (-) en los archivos modificados que aún no están en staging.',
+    },
+    {
+      type: 'multiple',
+      text: '¿Qué pasa si haces git commit sin hacer git add primero?',
+      options: ['El commit se hace con todos los cambios automáticamente', 'Git te pregunta si quieres agregar los archivos', 'El commit estará vacío o fallará si no hay nada en staging', 'Git hace "git add ." automáticamente'],
+      correct: 2,
+      explain: 'Si no hay nada en el staging area, git commit te avisará "nothing to commit". Debes usar git add para seleccionar los cambios que quieres guardar.',
+    },
+  ],
+  3: [
+    {
+      type: 'fill',
+      text: 'Crea una nueva rama llamada "feature" y cambia a ella en un solo comando:',
+      code: '$ git checkout ___ feature',
+      correct: '-b',
+      explain: '"git checkout -b nombre" crea una rama y cambia a ella en un paso. Equivale a "git branch nombre" + "git checkout nombre".',
+    },
+    {
+      type: 'multiple',
+      text: '¿Por qué es buena práctica usar ramas (branches)?',
+      options: ['Para hacer el proyecto más lento', 'Para trabajar en features de forma aislada sin afectar el código principal', 'Porque Git lo exige obligatoriamente', 'Para tener múltiples versiones del mismo archivo'],
+      correct: 1,
+      explain: 'Las ramas permiten desarrollar features, corregir bugs o hacer experimentos en paralelo sin romper el código en "main".',
+    },
+    {
+      type: 'multiple',
+      text: '¿Qué hace "git merge feature" estando en la rama "main"?',
+      options: ['Elimina la rama feature', 'Fusiona los cambios de feature dentro de main', 'Crea una copia de main en feature', 'Sube la rama feature a GitHub'],
+      correct: 1,
+      explain: 'git merge trae los commits de la rama especificada hacia la rama actual. Estando en main, "git merge feature" integra el trabajo de feature.',
+    },
+    {
+      type: 'match',
+      text: 'Empareja cada comando de ramas con su acción:',
+      pairs: [
+        { left: 'git branch', right: 'Listar todas las ramas' },
+        { left: 'git checkout main', right: 'Cambiar a la rama main' },
+        { left: 'git branch -d rama', right: 'Eliminar una rama' },
+        { left: 'git merge rama', right: 'Fusionar rama en la actual' },
+      ],
+      explain: 'Estos son los comandos fundamentales para gestionar ramas en Git.',
+    },
+    {
+      type: 'multiple',
+      text: '¿Qué es un "merge conflict"?',
+      options: ['Un error de red al hacer push', 'Cuando dos ramas modificaron las mismas líneas de un archivo', 'Un commit con mensaje vacío', 'Cuando la rama main está bloqueada'],
+      correct: 1,
+      explain: 'Un conflicto ocurre cuando Git no puede fusionar automáticamente porque dos ramas cambiaron las mismas líneas. Git marca las diferencias y tú debes resolverlas manualmente.',
+    },
+    {
+      type: 'fill',
+      text: 'Para ver en qué rama estás actualmente:',
+      code: '$ git ___________',
+      correct: 'branch',
+      explain: '"git branch" lista todas las ramas y marca con * la rama actual. "git branch -a" también muestra las ramas remotas.',
+    },
+    {
+      type: 'multiple',
+      text: '¿Qué estrategia de branching es la más popular para equipos?',
+      options: ['Trabajar todos en main directamente', 'Git Flow (main, develop, feature/*, release/*, hotfix/*)', 'Crear una rama por cada archivo', 'Nunca usar ramas'],
+      correct: 1,
+      explain: 'Git Flow es un modelo popular que define ramas con propósitos específicos. También existe GitHub Flow (más simple: main + feature branches).',
+    },
+    {
+      type: 'order',
+      text: 'Ordena el flujo correcto para hacer una feature branch:',
+      items: ['git merge feature', 'git checkout main', 'git checkout -b feature', 'Desarrollar y hacer commits'],
+      correctOrder: [2, 3, 1, 0],
+      explain: 'Flujo: crear rama feature → desarrollar → volver a main → merge. Así el trabajo queda aislado hasta estar listo.',
+    },
+  ],
+  4: [
+    {
+      type: 'fill',
+      text: 'Para vincular tu repositorio local con uno remoto en GitHub:',
+      code: '$ git remote add origin ___________',
+      correct: 'https://github.com/usuario/repo.git',
+      explain: 'git remote add origin [url] conecta tu repositorio local con el remoto. "origin" es el nombre convencional para el remoto principal.',
+    },
+    {
+      type: 'multiple',
+      text: '¿Cuál es la diferencia entre "git fetch" y "git pull"?',
+      options: ['Son idénticos, sinónimos', 'fetch descarga sin fusionar; pull descarga Y fusiona automáticamente', 'pull descarga sin fusionar; fetch fusiona automáticamente', 'fetch es más rápido que pull'],
+      correct: 1,
+      explain: 'git fetch solo descarga los cambios remotos sin tocar tu código. git pull = git fetch + git merge. Es más seguro usar fetch + merge manual cuando hay cambios importantes.',
+    },
+    {
+      type: 'multiple',
+      text: '¿Qué es un "Fork" en GitHub?',
+      options: ['Una rama de un repositorio', 'Una copia personal de un repositorio ajeno en tu cuenta', 'Un error en el código', 'Una herramienta de GitHub para compilar'],
+      correct: 1,
+      explain: 'El Fork crea una copia del repositorio en tu cuenta de GitHub. Es la base del flujo de contribución a proyectos open source: fork → clone → cambios → Pull Request.',
+    },
+    {
+      type: 'multiple',
+      text: '¿Qué es un Pull Request (PR)?',
+      options: ['El comando git pull', 'Una solicitud para que revisen e integren tus cambios en el proyecto', 'Un error cuando no puedes hacer push', 'Una petición para clonar un repositorio'],
+      correct: 1,
+      explain: 'Un Pull Request es una propuesta formal de cambios en GitHub. Permite revisión de código (code review), discusión y aprobación antes de fusionar al proyecto principal.',
+    },
+    {
+      type: 'fill',
+      text: 'Para subir tu rama "feature" al repositorio remoto por primera vez:',
+      code: '$ git push ___ origin feature',
+      correct: '-u',
+      explain: '"git push -u origin feature" sube la rama y establece el tracking upstream. Después solo necesitas "git push".',
+    },
+    {
+      type: 'match',
+      text: 'Empareja conceptos de GitHub con sus descripciones:',
+      pairs: [
+        { left: 'Issues', right: 'Reportar bugs o solicitar features' },
+        { left: 'Actions', right: 'Automatizar CI/CD en el repositorio' },
+        { left: 'Wiki', right: 'Documentación del proyecto' },
+        { left: 'Stars ⭐', right: 'Marcar repositorios favoritos' },
+      ],
+      explain: 'GitHub ofrece muchas herramientas además del control de versiones: Issues, Projects, Actions, Wiki, Pages, etc.',
+    },
+    {
+      type: 'order',
+      text: 'Ordena el flujo para contribuir a un proyecto open source:',
+      items: ['Crear Pull Request en GitHub', 'Fork del repositorio', 'git clone tu fork', 'Hacer cambios y commits'],
+      correctOrder: [1, 2, 3, 0],
+      explain: 'Flujo open source: Fork (copia a tu cuenta) → Clone local → cambios → PR al proyecto original.',
+    },
+    {
+      type: 'multiple',
+      text: '¿Qué es un README.md en GitHub?',
+      options: ['Un archivo de configuración de Git', 'La página principal del repositorio con información del proyecto', 'Un tipo especial de rama', 'Un archivo que Git genera automáticamente'],
+      correct: 1,
+      explain: 'README.md es el primer archivo que ve alguien al visitar tu repositorio en GitHub. Debe explicar qué hace el proyecto, cómo instalarlo y usarlo.',
+    },
+  ],
+  5: [
+    {
+      type: 'multiple',
+      text: '¿Qué hace "git rebase main" estando en una feature branch?',
+      options: ['Elimina la rama main', 'Reescribe el historial poniendo los commits de la feature sobre main actualizado', 'Fusiona main con la feature', 'Crea una nueva rama desde main'],
+      correct: 1,
+      explain: 'git rebase mueve los commits de tu rama sobre el tip de la rama especificada, creando un historial más lineal y limpio. Evita el "merge commit" extra.',
+    },
+    {
+      type: 'fill',
+      text: 'Para guardar cambios sin commit temporalmente (ej. cambiar de rama):',
+      code: '$ git ___________',
+      correct: 'stash',
+      explain: '"git stash" guarda cambios sin commit en una pila temporal. "git stash pop" los recupera. Útil para cambiar de contexto rápidamente.',
+    },
+    {
+      type: 'multiple',
+      text: '¿Cuál es la diferencia entre "git reset" y "git revert"?',
+      options: ['Son idénticos', 'reset elimina commits del historial; revert crea un commit nuevo que deshace', 'revert elimina commits; reset crea commits nuevos', 'reset es para ramas; revert para commits'],
+      correct: 1,
+      explain: 'git reset reescribe el historial (peligroso en ramas compartidas). git revert es seguro: crea un nuevo commit que deshace los cambios, manteniendo el historial.',
+    },
+    {
+      type: 'multiple',
+      text: '¿Qué hace "git cherry-pick abc123"?',
+      options: ['Elimina el commit abc123', 'Aplica los cambios del commit abc123 a la rama actual', 'Busca un commit por mensaje', 'Crea una nueva rama desde ese commit'],
+      correct: 1,
+      explain: 'git cherry-pick aplica los cambios de un commit específico a otra rama sin hacer merge completo. Útil para aplicar bugfixes de una rama a otra.',
+    },
+    {
+      type: 'match',
+      text: 'Empareja los comandos avanzados con su función:',
+      pairs: [
+        { left: 'git bisect', right: 'Encontrar el commit que introdujo un bug' },
+        { left: 'git reflog', right: 'Ver historial de todos los movimientos de HEAD' },
+        { left: 'git tag v1.0', right: 'Marcar una versión en el historial' },
+        { left: 'git clean -fd', right: 'Eliminar archivos no rastreados' },
+      ],
+      explain: 'Estos comandos avanzados son muy útiles en proyectos reales para debugging, releases y mantenimiento.',
+    },
+    {
+      type: 'fill',
+      text: 'Para deshacer el último commit pero MANTENER los cambios en los archivos:',
+      code: '$ git reset ___ HEAD~1',
+      correct: '--soft',
+      explain: '"git reset --soft HEAD~1" deshace el commit pero deja los cambios en staging. "--mixed" los deja sin staging. "--hard" los elimina completamente.',
+    },
+    {
+      type: 'multiple',
+      text: '¿Qué es el "squash" de commits?',
+      options: ['Eliminar commits del historial', 'Combinar múltiples commits en uno solo', 'Separar un commit en varios', 'Copiar commits de otra rama'],
+      correct: 1,
+      explain: 'El squash (git rebase -i) combina varios commits en uno. Muy útil antes de hacer merge para tener un historial limpio: "10 commits de prueba" → "1 commit limpio".',
+    },
+    {
+      type: 'order',
+      text: 'Ordena las buenas prácticas de Git (de más a menos importante):',
+      items: ['Nunca hacer force push a ramas compartidas', 'Escribir mensajes de commit descriptivos', 'Hacer commits pequeños y frecuentes', 'Usar .gitignore desde el inicio'],
+      correctOrder: [0, 2, 1, 3],
+      explain: 'No hay un orden "correcto" absoluto, pero todas son prácticas esenciales. El force push a ramas compartidas es el error más crítico pues reescribe el historial de todo el equipo.',
+    },
+  ],
+};
+
+// ============================================================
+// STATE
+// ============================================================
+let state = {
+  currentLevel: 1,
+  currentQuestion: 0,
+  score: 0,
+  hearts: 3,
+  correct: 0,
+  startTime: null,
+  questions: [],
+  answered: false,
+  levelStars: {},  // {levelId: stars}
+  totalScore: 0,
+  matchSelected: null,
+  matchedPairs: [],
+  orderDragSrc: null,
+  orderItems: [],
+};
+
+// ============================================================
+// SCREEN MANAGER
+// ============================================================
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (id === 'level-select') renderLevelSelect();
+  if (id === 'glossary') renderGlossary();
+}
+
+// ============================================================
+// LEVEL SELECT
+// ============================================================
+function renderLevelSelect() {
+  const grid = document.getElementById('levels-grid');
+  grid.innerHTML = '';
+  LEVELS.forEach((level, idx) => {
+    const unlocked = idx === 0 || state.levelStars[idx] >= 1;
+    const stars = state.levelStars[level.id] || 0;
+    const card = document.createElement('div');
+    card.className = 'level-card' + (unlocked ? '' : ' locked');
+    card.style.setProperty('--level-color', level.color);
+    card.innerHTML = `
+      <div class="level-header">
+        <span class="level-icon">${level.icon}</span>
+        <span class="level-badge" style="background:${level.color}">${level.badge}</span>
+      </div>
+      <div class="level-num">NIVEL ${level.id}</div>
+      <div class="level-name">${level.name}</div>
+      <div class="level-desc">${level.desc}</div>
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div class="level-meta">${level.questions} preguntas · <span>${unlocked ? 'DISPONIBLE' : 'BLOQUEADO'}</span></div>
+        <div class="stars-display">${[1,2,3].map(s => stars >= s ? '⭐' : '☆').join('')}</div>
+      </div>
+      ${!unlocked ? '<div class="lock-icon">🔒</div>' : ''}
+    `;
+    if (unlocked) card.addEventListener('click', () => startLevel(level.id));
+    grid.appendChild(card);
+  });
+}
+
+// ============================================================
+// START LEVEL
+// ============================================================
+function startLevel(levelId) {
+  const level = LEVELS.find(l => l.id === levelId);
+  state.currentLevel = levelId;
+  state.currentQuestion = 0;
+  state.score = 0;
+  state.hearts = 3;
+  state.correct = 0;
+  state.answered = false;
+  state.startTime = Date.now();
+  state.questions = [...QUESTIONS[levelId]];
+  state.matchSelected = null;
+  state.matchedPairs = [];
+
+  document.getElementById('g-icon').textContent = level.icon;
+  document.getElementById('g-name').textContent = level.name;
+  updateTopBar();
+  showScreen('game');
+  renderQuestion();
+}
+
+function updateTopBar() {
+  const total = state.questions.length;
+  const cur = state.currentQuestion;
+  document.getElementById('g-num').textContent = `Pregunta ${cur + 1}/${total}`;
+  document.getElementById('g-prog-text').textContent = `${cur}/${total}`;
+  document.getElementById('g-progress').style.width = `${(cur / total) * 100}%`;
+  document.getElementById('g-score').textContent = state.score;
+  document.getElementById('g-hearts').textContent = '❤️'.repeat(state.hearts) + '🖤'.repeat(3 - state.hearts);
+}
+
+// ============================================================
+// RENDER QUESTION
+// ============================================================
+function renderQuestion() {
+  if (state.currentQuestion >= state.questions.length) {
+    showLevelComplete();
+    return;
+  }
+
+  state.answered = false;
+  state.matchSelected = null;
+  state.matchedPairs = [];
+
+  const q = state.questions[state.currentQuestion];
+  const area = document.getElementById('question-area');
+
+  const typeLabels = { multiple: '🎯 Opción Múltiple', fill: '⌨️ Completar', order: '🔢 Ordenar', match: '🔗 Emparejar' };
+
+  let html = `<div class="q-type-badge">${typeLabels[q.type] || q.type}</div>`;
+  html += `<div class="question-text">${q.text}</div>`;
+
+  if (q.code) {
+    html += `<div class="code-block">${q.code}</div>`;
+  }
+
+  if (q.concept) {
+    html += `<div class="concept-box"><h3>💡 Concepto</h3><p>${q.concept}</p></div>`;
+  }
+
+  if (q.type === 'multiple') {
+    html += `<div class="options-grid">`;
+    q.options.forEach((opt, i) => {
+      html += `<button class="option-btn" id="opt-${i}" onclick="answerMultiple(${i})">
+        <span class="option-letter">${'ABCD'[i]}</span>
+        <span>${opt}</span>
+      </button>`;
+    });
+    html += `</div>`;
+    html += `<div id="feedback-area"></div>`;
+  }
+
+  else if (q.type === 'fill') {
+    html += `<div class="fill-area">
+      <input class="terminal-input" id="fill-input" placeholder="Escribe el comando aquí..." spellcheck="false" onkeydown="if(event.key==='Enter')answerFill()">
+      <button class="submit-btn" onclick="answerFill()">▶ Verificar</button>
+    </div>`;
+    html += `<div id="feedback-area"></div>`;
+  }
+
+  else if (q.type === 'order') {
+    // Shuffle items for display
+    const shuffled = q.correctOrder.map(i => q.items[i]);
+    const displayOrder = shuffleArray([...Array(q.items.length).keys()]);
+    state.orderItems = displayOrder.map(i => shuffled[i]);
+
+    html += `<div class="order-list" id="order-list">`;
+    state.orderItems.forEach((item, i) => {
+      html += `<div class="order-item" draggable="true" data-idx="${i}" 
+        ondragstart="dragStart(event)" ondragover="dragOver(event)" 
+        ondrop="dropItem(event)" ondragleave="dragLeave(event)">
+        <span class="drag-handle">⠿</span>
+        <span class="item-text">${item}</span>
+      </div>`;
+    });
+    html += `</div>`;
+    html += `<button class="submit-btn" style="margin-top:0.5rem" onclick="answerOrder()">▶ Verificar Orden</button>`;
+    html += `<div id="feedback-area"></div>`;
+  }
+
+  else if (q.type === 'match') {
+    const rights = shuffleArray(q.pairs.map((p, i) => ({ text: p.right, idx: i })));
+    html += `<div class="match-area">
+      <div class="match-col">
+        ${q.pairs.map((p, i) => `<div class="match-item left" id="left-${i}" data-idx="${i}" onclick="selectMatch('left',${i})">${p.left}</div>`).join('')}
+      </div>
+      <div class="match-col">
+        ${rights.map((r, i) => `<div class="match-item right" id="right-${r.idx}" data-idx="${r.idx}" onclick="selectMatch('right',${r.idx})">${r.text}</div>`).join('')}
+      </div>
+    </div>`;
+    html += `<div id="feedback-area"></div>`;
+  }
+
+  area.innerHTML = html;
+  updateTopBar();
+}
+
+// ============================================================
+// ANSWER HANDLERS
+// ============================================================
+function answerMultiple(chosen) {
+  if (state.answered) return;
+  state.answered = true;
+
+  const q = state.questions[state.currentQuestion];
+  const isCorrect = chosen === q.correct;
+
+  document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+
+  const chosenBtn = document.getElementById(`opt-${chosen}`);
+  const correctBtn = document.getElementById(`opt-${q.correct}`);
+
+  if (isCorrect) {
+    chosenBtn.classList.add('correct');
+    addScore(100);
+  } else {
+    chosenBtn.classList.add('wrong');
+    correctBtn.classList.add('correct');
+    loseHeart();
+  }
+
+  showFeedback(isCorrect, q.explain);
+}
+
+function answerFill() {
+  if (state.answered) return;
+  const q = state.questions[state.currentQuestion];
+  const input = document.getElementById('fill-input');
+  const val = input.value.trim().toLowerCase();
+  const correct = q.correct.trim().toLowerCase();
+  const isCorrect = val === correct || correct.split('|').includes(val);
+  state.answered = true;
+
+  input.disabled = true;
+  input.classList.add(isCorrect ? 'correct' : 'wrong');
+
+  if (isCorrect) { addScore(100); }
+  else { loseHeart(); }
+
+  showFeedback(isCorrect, `Respuesta correcta: <code style="color:var(--accent3);background:rgba(78,205,196,0.1);padding:0.1rem 0.4rem;border-radius:4px">${q.correct}</code>. ${q.explain}`);
+}
+
+function answerOrder() {
+  if (state.answered) return;
+  const q = state.questions[state.currentQuestion];
+  const list = document.getElementById('order-list');
+  const items = [...list.querySelectorAll('.order-item')];
+  const currentOrder = items.map(el => el.querySelector('.item-text').textContent.trim());
+  const correctOrdered = q.correctOrder.map(i => q.items[i]);
+  const isCorrect = currentOrder.every((item, i) => item === correctOrdered[i]);
+
+  state.answered = true;
+  document.querySelector('.submit-btn').disabled = true;
+
+  items.forEach(el => {
+    el.style.borderColor = isCorrect ? 'var(--success)' : 'var(--fail)';
+    el.style.background = isCorrect ? 'rgba(74,222,128,0.1)' : 'rgba(248,113,113,0.05)';
+    el.draggable = false;
+  });
+
+  if (isCorrect) { addScore(150); }
+  else {
+    loseHeart();
+    // Show correct order
+    setTimeout(() => {
+      list.innerHTML = correctOrdered.map(item =>
+        `<div class="order-item" style="border-color:var(--success);background:rgba(74,222,128,0.1)"><span class="drag-handle">✓</span><span>${item}</span></div>`
+      ).join('');
+    }, 800);
+  }
+
+  showFeedback(isCorrect, q.explain);
+}
+
+// Match state
+let matchLeft = null;
+let matchRight = null;
+
+function selectMatch(side, idx) {
+  if (state.answered) return;
+  const q = state.questions[state.currentQuestion];
+
+  if (state.matchedPairs.includes(idx) && side === 'left') return;
+  if (state.matchedPairs.includes(idx) && side === 'right') return;
+
+  document.querySelectorAll('.match-item').forEach(el => {
+    if (!el.classList.contains('matched')) el.classList.remove('selected');
+  });
+
+  if (side === 'left') {
+    matchLeft = idx;
+    document.getElementById(`left-${idx}`).classList.add('selected');
+  } else {
+    matchRight = idx;
+    document.getElementById(`right-${idx}`).classList.add('selected');
+  }
+
+  if (matchLeft !== null && matchRight !== null) {
+    const isMatch = matchLeft === matchRight;
+
+    if (isMatch) {
+      document.getElementById(`left-${matchLeft}`).classList.remove('selected');
+      document.getElementById(`right-${matchRight}`).classList.remove('selected');
+      document.getElementById(`left-${matchLeft}`).classList.add('matched');
+      document.getElementById(`right-${matchRight}`).classList.add('matched');
+      state.matchedPairs.push(matchLeft);
+      addScore(25);
+
+      if (state.matchedPairs.length === q.pairs.length) {
+        state.answered = true;
+        addScore(0); // bonus
+        showFeedback(true, q.explain);
+      }
+    } else {
+      document.getElementById(`left-${matchLeft}`).classList.add('wrong-match');
+      document.getElementById(`right-${matchRight}`).classList.add('wrong-match');
+      setTimeout(() => {
+        document.querySelectorAll('.wrong-match').forEach(el => {
+          el.classList.remove('wrong-match', 'selected');
+        });
+      }, 600);
+      if (!state.answered) {
+        // Light penalty on wrong match - don't lose heart yet, wait for full wrong
+      }
+    }
+
+    matchLeft = null;
+    matchRight = null;
+  }
+}
+
+// ============================================================
+// FEEDBACK
+// ============================================================
+function showFeedback(isCorrect, explain) {
+  const area = document.getElementById('feedback-area');
+  area.innerHTML = `
+    <div class="feedback-bar ${isCorrect ? 'correct' : 'wrong'}">
+      <span class="feedback-icon">${isCorrect ? '🎉' : '💡'}</span>
+      <div class="feedback-content">
+        <div class="feedback-title">${isCorrect ? '¡Correcto!' : 'Casi...'}</div>
+        <div class="feedback-explain">${explain}</div>
+      </div>
+      <button class="next-btn" onclick="nextQuestion()">${state.currentQuestion + 1 < state.questions.length ? 'Siguiente →' : 'Finalizar 🏁'}</button>
+    </div>
+  `;
+}
+
+function nextQuestion() {
+  state.currentQuestion++;
+  renderQuestion();
+}
+
+// ============================================================
+// SCORE & HEARTS
+// ============================================================
+function addScore(pts) {
+  state.score += pts;
+  if (pts > 0) state.correct++;
+  document.getElementById('g-score').textContent = state.score;
+}
+
+function loseHeart() {
+  state.hearts--;
+  document.getElementById('g-hearts').textContent = '❤️'.repeat(Math.max(0, state.hearts)) + '🖤'.repeat(Math.max(0, 3 - state.hearts));
+  if (state.hearts <= 0) {
+    setTimeout(() => {
+      document.getElementById('go-score').textContent = state.score;
+      showScreen('game-over');
+    }, 1500);
+  }
+}
+
+// ============================================================
+// LEVEL COMPLETE
+// ============================================================
+function showLevelComplete() {
+  const elapsed = Math.round((Date.now() - state.startTime) / 1000);
+  const total = state.questions.length;
+  const acc = state.correct / total;
+  const stars = acc >= 0.9 ? 3 : acc >= 0.65 ? 2 : 1;
+
+  state.levelStars[state.currentLevel] = Math.max(state.levelStars[state.currentLevel] || 0, stars);
+  state.totalScore += state.score;
+
+  const level = LEVELS.find(l => l.id === state.currentLevel);
+
+  document.getElementById('lc-icon').textContent = stars === 3 ? '🏆' : stars === 2 ? '🥈' : '🥉';
+  document.getElementById('lc-title').textContent = stars === 3 ? '¡Perfecto!' : stars === 2 ? '¡Muy bien!' : '¡Nivel superado!';
+  document.getElementById('lc-score').textContent = state.score;
+  document.getElementById('lc-correct').textContent = `${state.correct}/${total}`;
+  document.getElementById('lc-time').textContent = `${elapsed}s`;
+  document.getElementById('lc-tip-text').textContent = level.tip;
+
+  const starsEl = document.getElementById('lc-stars');
+  starsEl.innerHTML = [1,2,3].map((s, i) =>
+    `<span class="star-anim" style="animation-delay:${i*0.15}s">${stars >= s ? '⭐' : '☆'}</span>`
+  ).join('');
+
+  const nextBtn = document.getElementById('lc-next-btn');
+  const nextLevel = LEVELS.find(l => l.id === state.currentLevel + 1);
+  if (nextLevel) {
+    nextBtn.textContent = `${nextLevel.icon} ${nextLevel.name} →`;
+    nextBtn.style.display = '';
+  } else {
+    nextBtn.textContent = '🎓 ¡Completaste el juego!';
+    nextBtn.onclick = () => {
+      showToast('🎓 ¡Eres un experto de Git!', 4000);
+      showScreen('level-select');
+    };
+  }
+
+  spawnConfetti();
+  showScreen('level-complete');
+}
+
+function nextLevel() {
+  const nextId = state.currentLevel + 1;
+  if (nextId <= LEVELS.length) {
+    startLevel(nextId);
+  } else {
+    showScreen('level-select');
+  }
+}
+
+function restartLevel() {
+  startLevel(state.currentLevel);
+}
+
+// ============================================================
+// DRAG & DROP (ORDER)
+// ============================================================
+let dragSrcIdx = null;
+
+function dragStart(e) {
+  dragSrcIdx = parseInt(e.currentTarget.dataset.idx);
+  e.dataTransfer.effectAllowed = 'move';
+}
+
+function dragOver(e) {
+  e.preventDefault();
+  e.currentTarget.classList.add('drag-over');
+  e.dataTransfer.dropEffect = 'move';
+}
+
+function dragLeave(e) {
+  e.currentTarget.classList.remove('drag-over');
+}
+
+function dropItem(e) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  const targetIdx = parseInt(e.currentTarget.dataset.idx);
+
+  if (dragSrcIdx === null || dragSrcIdx === targetIdx) return;
+
+  const list = document.getElementById('order-list');
+  const items = [...list.querySelectorAll('.order-item')];
+
+  const srcEl = items[dragSrcIdx];
+  const tgtEl = items[targetIdx];
+
+  const srcText = srcEl.querySelector('.item-text').textContent;
+  const tgtText = tgtEl.querySelector('.item-text').textContent;
+
+  srcEl.querySelector('.item-text').textContent = tgtText;
+  tgtEl.querySelector('.item-text').textContent = srcText;
+
+  dragSrcIdx = null;
+}
+
+// ============================================================
+// GLOSSARY
+// ============================================================
+function renderGlossary() {
+  const grid = document.getElementById('glossary-grid');
+  grid.innerHTML = GLOSSARY.map(g => `
+    <div class="glossary-card">
+      <span class="g-command">${g.cmd}</span>
+      <p class="g-desc">${g.desc}</p>
+    </div>
+  `).join('');
+}
+
+// ============================================================
+// UTILS
+// ============================================================
+function shuffleArray(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function confirmLeave() {
+  if (confirm('¿Seguro que quieres salir? Perderás el progreso de este nivel.')) {
+    showScreen('level-select');
+  }
+}
+
+function showToast(msg, duration = 3000) {
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), duration);
+}
+
+function spawnConfetti() {
+  const colors = ['#f7c948', '#ff6b6b', '#4ecdc4', '#a78bfa', '#4ade80'];
+  for (let i = 0; i < 40; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.cssText = `
+      left: ${Math.random() * 100}vw;
+      top: -10px;
+      background: ${colors[Math.floor(Math.random() * colors.length)]};
+      animation-duration: ${1.5 + Math.random() * 2}s;
+      animation-delay: ${Math.random() * 0.5}s;
+      transform: rotate(${Math.random() * 360}deg);
+    `;
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 4000);
+  }
+}
+
+// ============================================================
+// INIT
+// ============================================================
+renderLevelSelect();
+</script>
+</body>
+</html>
